@@ -3,7 +3,7 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TodoCard from '../../components/TodoCard'
 import { FontSizes } from '../../utils/fonts'
-import { MyColors } from '../../utils/colors'
+import { MyColors } from '../../utils/colors' 
 
 export default function ListTodoScreen() {
 
