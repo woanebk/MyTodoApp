@@ -15,7 +15,7 @@ function TodoCard({ children, onDelete }: TodoCardProps): React.JSX.Element {
     <Swipe onDelete={onDelete} borderRadius={8}>
       <Pressable onPress={() => {}}>
       <View style={styles.container}>
-        <Checkbox isCheck />
+         <Checkbox />
         <View style={styles.info}>
           <Text numberOfLines={1} style={styles.titleText}>asd</Text>
           <Text numberOfLines={1} style={styles.descrText}>asd</Text>

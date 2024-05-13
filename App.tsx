@@ -27,7 +27,7 @@ function App(): React.JSX.Element {
       <BottomSheetModalProvider>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName={NavigationKeys.todoDetails}
+            initialRouteName={NavigationKeys.listGroup}
           >
             <Stack.Screen name={NavigationKeys.listGroup} component={ListGroupScreen}
               options={{ title: 'List Group' }} />
