@@ -1,6 +1,7 @@
 type TodoGroup = {
     name: string; 
     todos: Todo[];
+    mainColor?: string
 }
 
 type Todo = { 

@@ -7,9 +7,11 @@ import { Icon } from '@rneui/themed'
 import { MyColors } from '../../utils/colors'
 import { ScrollView } from 'react-native-gesture-handler' 
 import { FontSizes } from '../../utils/fonts'
+import { useAppNavigation } from '../../hooks/useAppNavigation'
+import { TouchableOpacity } from '@gorhom/bottom-sheet'
 
 export default function ListGroupScreen({ }) {
-  const navigation = useNavigation()
+  const navigation = useAppNavigation();
   const [myGroups, setMyGroups] = useState<TodoGroup[]>()
 
   useEffect(() => {
@@ -66,16 +68,16 @@ export default function ListGroupScreen({ }) {
     return (
       <View>
         <GroupCard icon={<Icon name='sunny' color={MyColors.orange} type='ionicons' />}
-          group={{ name: 'All', todos: [] }} isDefault={false}
+          group={{ name: 'All', todos: [], mainColor: MyColors.orange }} isDefault={false}
         />
         <GroupCard icon={<Icon name='star-outline' color={MyColors.red} type='ionicons' />}
-          group={{ name: 'Important', todos: [] }} isDefault={false}
+          group={{ name: 'Important', todos: [], mainColor: MyColors.red }} isDefault={false}
         />
-        <GroupCard icon={<Icon name='calendar' style={{ marginLeft: 4 }} size={18} color={MyColors.blueviolet} type='feather' />}
-          group={{ name: 'Planned', todos: [] }} isDefault={false}
+        <GroupCard icon={<Icon name='calendar' style={{ marginLeft: 4 }} size={18} color={MyColors.indianred} type='feather' />}
+          group={{ name: 'Planned', todos: [] ,mainColor: MyColors.indianred }} isDefault={false}
         />
         <GroupCard icon={<Icon name='person-outline' color={MyColors.green} type='ionicons' />}
-          group={{ name: 'Personal', todos: [] }} isDefault={false}
+          group={{ name: 'Personal', todos: [], mainColor: MyColors.green  }} isDefault={false}
         />
       </View>)
   }
@@ -93,10 +95,14 @@ export default function ListGroupScreen({ }) {
 
         )}
       </ScrollView>
-      <View style={styles.actionFooter}>
-        <Icon name={'add'} color={MyColors.blueviolet} type='ionicons'/> 
-        <Text style={styles.actionFooterText}>New Group</Text>
-      </View>
+      <TouchableOpacity onPress={() => {
+    navigation.navigate('ListTodo', { isCreate: true}) 
+      }}>
+        <View style={styles.actionFooter}>
+          <Icon name={'add'} color={MyColors.blueviolet} type='ionicons'/> 
+          <Text style={styles.actionFooterText}>New Group</Text>
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }

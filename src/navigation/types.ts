@@ -1,5 +1,5 @@
 export type RootStackParamList = {
     ListGroup: undefined;
-    ListTodo: undefined;
-    TodoDetails: undefined;
-  }; 
+    ListTodo: {  group?: TodoGroup, isCreate?: boolean} | undefined;
+    TodoDetails: {mainColor?: string, todo: Todo} | undefined;
+  };  

@@ -24,3 +24,7 @@ export function adjustColor(color: string, amount: number): string {
 function clamp(value: number): number {
   return Math.max(0, Math.min(255, value));
 }
+
+export function generateUUID (): string {
+  return crypto.randomUUID();
+}

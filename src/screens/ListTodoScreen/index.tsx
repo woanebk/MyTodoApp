@@ -3,19 +3,24 @@ import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TodoCard from '../../components/TodoCard'
 import { FontSizes } from '../../utils/fonts'
-import { MyColors } from '../../utils/colors'
-import { useNavigation } from '@react-navigation/native'
+import { MyColors } from '../../utils/colors' 
 import CustomHeader from '../../components/CustomHeader'
 import { adjustColor } from '../../utils/utils' 
 import { FAB } from '@rneui/themed'
 import CustomTextInput from '../../components/CustomTextInput' 
 import PaperBackground from '../../components/PaperBackground' 
+import { useAppNavigation } from '../../hooks/useAppNavigation'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { RootStackParamList } from '../../navigation/types'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 const yThreshold = 10;
 const fadeTime = 100; //ms
 
-export default function ListTodoScreen() {
-  const navigation = useNavigation()
+type ListTodoProp = NativeStackScreenProps<RootStackParamList, 'ListTodo'>
+
+export default function ListTodoScreen({route}: ListTodoProp) {
+  const navigation = useAppNavigation() 
 
   // Title Fade animation:
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -24,7 +29,8 @@ export default function ListTodoScreen() {
   var currentOffset = 0; 
 
   // colors:
-  const mainColor = MyColors.blueviolet
+  const params = route.params;
+  const mainColor = params?.group?.mainColor || MyColors.blueviolet
   const subColor = adjustColor(mainColor, 10)
   const bgColor = adjustColor(mainColor, 70)
 
@@ -72,7 +78,7 @@ export default function ListTodoScreen() {
 
   const ListHeader = (title: string, descr: string) => {
     return <Animated.View style={{ height: 70, marginTop: 0, opacity: titleAnim }}>
-      <CustomTextInput color={mainColor} text={title} autoFocus={false} />
+      <CustomTextInput color={mainColor} text={title} autoFocus={params?.isCreate} />
       <Text style={{ fontSize: FontSizes.medium, color: subColor }}>{descr}</Text>
     </Animated.View>
   } 
@@ -105,7 +111,9 @@ export default function ListTodoScreen() {
         placement='right'
         icon={{ name: 'add', color: 'white' }}
         color={subColor}
-        onPress={ () => {}}
+        onPress={ () => {
+          navigation.navigate('TodoDetails')
+        }}
       />  
     </SafeAreaView>
   )

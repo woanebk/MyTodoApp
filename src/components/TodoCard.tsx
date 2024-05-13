@@ -5,15 +5,20 @@ import { MyColors } from '../utils/colors';
 import { FontSizes } from '../utils/fonts';
 import FavoriteButton from './FavoriteButton';
 import Swipe from './Swipe';
+import { useAppNavigation } from '../hooks/useAppNavigation';
 
 type TodoCardProps = PropsWithChildren<{
   onDelete?: Function
 }>;
 
 function TodoCard({ children, onDelete }: TodoCardProps): React.JSX.Element {
+  const navigation = useAppNavigation();
+
   return (
     <Swipe onDelete={onDelete} borderRadius={8}>
-      <Pressable onPress={() => {}}>
+      <Pressable onPress={() => {
+        navigation.navigate('TodoDetails')
+      }}>
       <View style={styles.container}>
          <Checkbox />
         <View style={styles.info}>

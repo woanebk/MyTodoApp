@@ -7,19 +7,20 @@ import Swipe from './Swipe';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { NavigationProp, useNavigation } from '@react-navigation/native'; 
 import { RootStackParamList } from '../navigation/types';
+import { useAppNavigation } from '../hooks/useAppNavigation';
 
 
 type GroupCardProps = PropsWithChildren<{
   onDelete?: Function,
   isDefault?: boolean,
   icon?: any,
-  group: TodoGroup
+  group: TodoGroup,
 }>;
 
 function GroupCard({ children, onDelete, icon, group, isDefault = true }: GroupCardProps): React.JSX.Element {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useAppNavigation();
   const content = () => <TouchableWithoutFeedback onPress={() => {
-    navigation.navigate('ListTodo')
+    navigation.navigate('ListTodo', { group: group})
   }}>
     <View style={styles.container}>
       {icon || <Icon name='list' color={MyColors.blueviolet} />}
