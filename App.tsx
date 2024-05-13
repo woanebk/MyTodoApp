@@ -5,20 +5,20 @@
  * @format
  */
 
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react'; 
 import { NavigationContainer } from '@react-navigation/native';
 import {
   StyleSheet,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import ListTodoScreen from './src/screens/ListTodoScreen';
-import { NavigationKeys } from './src/utils/navigationKeys';
+import ListTodoScreen from './src/screens/ListTodoScreen'; 
 import ListGroupScreen from './src/screens/ListGroupScreen';
 import TodoDetailsScreen from './src/screens/TodoDetailsScreen';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'; 
+import { RootStackParamList } from './src/navigation/types';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
 
@@ -26,16 +26,16 @@ function App(): React.JSX.Element {
     <GestureHandlerRootView>
       <BottomSheetModalProvider>
         <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={NavigationKeys.listGroup}
+          <RootStack.Navigator
+            initialRouteName={'ListGroup'}
           >
-            <Stack.Screen name={NavigationKeys.listGroup} component={ListGroupScreen}
+            <RootStack.Screen name={'ListGroup'} component={ListGroupScreen}
               options={{ title: 'List Group' }} />
-            <Stack.Screen name={NavigationKeys.listTodo} component={ListTodoScreen}
+            <RootStack.Screen name={'ListTodo'} component={ListTodoScreen}
               options={{ title: 'List To do' }} />
-            <Stack.Screen name={NavigationKeys.todoDetails} component={TodoDetailsScreen}
+            <RootStack.Screen name={'TodoDetails'} component={TodoDetailsScreen}
               options={{ title: '' }} />
-          </Stack.Navigator>
+          </RootStack.Navigator>
         </NavigationContainer>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

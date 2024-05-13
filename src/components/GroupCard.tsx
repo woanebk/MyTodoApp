@@ -5,8 +5,9 @@ import { FontSizes } from '../utils/fonts';
 import { Icon } from '@rneui/themed';
 import Swipe from './Swipe';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationKeys } from '../utils/navigationKeys';
+import { NavigationProp, useNavigation } from '@react-navigation/native'; 
+import { RootStackParamList } from '../navigation/types';
+
 
 type GroupCardProps = PropsWithChildren<{
   onDelete?: Function,
@@ -16,9 +17,9 @@ type GroupCardProps = PropsWithChildren<{
 }>;
 
 function GroupCard({ children, onDelete, icon, group, isDefault = true }: GroupCardProps): React.JSX.Element {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const content = () => <TouchableWithoutFeedback onPress={() => {
-    navigation.navigate(NavigationKeys.listTodo as never,)
+    navigation.navigate('ListTodo')
   }}>
     <View style={styles.container}>
       {icon || <Icon name='list' color={MyColors.blueviolet} />}
