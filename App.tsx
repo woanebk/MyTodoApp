@@ -9,32 +9,35 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import {
-  StyleSheet, 
+  StyleSheet,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import ListTodoScreen from './src/screens/ListTodoScreen';
 import { NavigationKeys } from './src/utils/navigationKeys';
 import ListGroupScreen from './src/screens/ListGroupScreen';
-import TodoDetailsScreen from './src/screens/TodoDetailsScreen'; 
+import TodoDetailsScreen from './src/screens/TodoDetailsScreen';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const Stack = createNativeStackNavigator();
 
-function App(): React.JSX.Element { 
+function App(): React.JSX.Element {
 
   return (
     <GestureHandlerRootView>
-      <NavigationContainer>
-        <Stack.Navigator 
-        initialRouteName={NavigationKeys.listGroup} 
-        >
-          <Stack.Screen name={NavigationKeys.listGroup} component={ListGroupScreen}
-            options={{ title: 'List Group'}} />
-          <Stack.Screen name={NavigationKeys.listTodo} component={ListTodoScreen}
-            options={{ title: 'List To do' }} />
+      <BottomSheetModalProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={NavigationKeys.todoDetails}
+          >
+            <Stack.Screen name={NavigationKeys.listGroup} component={ListGroupScreen}
+              options={{ title: 'List Group' }} />
+            <Stack.Screen name={NavigationKeys.listTodo} component={ListTodoScreen}
+              options={{ title: 'List To do' }} />
             <Stack.Screen name={NavigationKeys.todoDetails} component={TodoDetailsScreen}
-            options={{ title: 'Details' }} />
-        </Stack.Navigator>
-      </NavigationContainer>
+              options={{ title: '' }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 }

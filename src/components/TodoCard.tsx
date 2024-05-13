@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react';
+import { memo, type PropsWithChildren } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Checkbox from './Checkbox';
 import { MyColors } from '../utils/colors';
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TodoCard;
+export default memo(TodoCard);

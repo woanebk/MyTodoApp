@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react';
+import { memo, type PropsWithChildren } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { MyColors } from '../utils/colors';
 import { FontSizes } from '../utils/fonts';
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupCard;
+export default memo(GroupCard);

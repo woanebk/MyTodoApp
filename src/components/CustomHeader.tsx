@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import { memo, type PropsWithChildren } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MyColors } from '../utils/colors';
 import { useNavigation } from '@react-navigation/native';
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CustomHeader;
+export default memo(CustomHeader);
