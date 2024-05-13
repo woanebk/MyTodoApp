@@ -84,10 +84,7 @@ export default function ListGroupScreen({ }) {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent />
       <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{
-          rowGap: 4
-        }}
+        style={{ flex: 1 }} 
       >
         {defaultGroups()}
         <View style={styles.divider} />
