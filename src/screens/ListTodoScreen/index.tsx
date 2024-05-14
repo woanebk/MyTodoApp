@@ -1,11 +1,11 @@
 import { Animated, NativeScrollEvent, NativeSyntheticEvent, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TodoCard from '../../components/TodoCard'
 import { FontSizes } from '../../utils/fonts'
 import { MyColors } from '../../utils/colors' 
 import CustomHeader from '../../components/CustomHeader'
-import { adjustColor } from '../../utils/utils' 
+import { adjustColor, generateUUID } from '../../utils/utils' 
 import { FAB } from '@rneui/themed'
 import CustomTextInput from '../../components/CustomTextInput' 
 import PaperBackground from '../../components/PaperBackground' 
@@ -13,6 +13,8 @@ import { useAppNavigation } from '../../hooks/useAppNavigation'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { RootStackParamList } from '../../navigation/types'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useGroups } from '../../context/GroupProvider'
+import { DEFAULT_GROUP_NAME } from '../../utils/constants'
 
 const yThreshold = 10;
 const fadeTime = 100; //ms
@@ -34,12 +36,20 @@ export default function ListTodoScreen({route}: ListTodoProp) {
   const subColor = adjustColor(mainColor, 10)
   const bgColor = adjustColor(mainColor, 70)
 
-  const [title, setTitle] = useState<string>('Today') 
+  const [data] = useState<TodoGroup>(params!.group!) 
+  const {createNewGroup} = useGroups()
 
   useEffect(() => {
     navigation.setOptions({
       headerShown: false
-    })
+    }) 
+  }, [])
+
+  useLayoutEffect(() => {
+    if (!params?.group) {
+      var uuid = generateUUID()
+      createNewGroup({id: uuid, name: DEFAULT_GROUP_NAME, todos: []})
+    }
   }, [])
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -78,13 +88,13 @@ export default function ListTodoScreen({route}: ListTodoProp) {
 
   const ListHeader = (title: string, descr: string) => {
     return <Animated.View style={{ height: 70, marginTop: 0, opacity: titleAnim }}>
-      <CustomTextInput color={mainColor} text={title} autoFocus={params?.isCreate} />
+      <CustomTextInput editable={!params?.group?.mainColor} color={mainColor} text={title} autoFocus={!params?.group} />
       <Text style={{ fontSize: FontSizes.medium, color: subColor }}>{descr}</Text>
     </Animated.View>
   } 
 
-  const renderItem = ({item, index}: {item: number, index: number}) => {
-    return (<TodoCard key={index}/>)
+  const renderItem = ({item, index}: {item: Todo, index: number}) => {
+    return (<TodoCard groupId={params?.group?.id ?? ''} key={index} todo={item}/>)
   }
 
   return (
@@ -93,14 +103,14 @@ export default function ListTodoScreen({route}: ListTodoProp) {
         <Animated.Text style={[styles.titleText, {
           opacity: fadeAnim,
           color: mainColor
-        }]}>{title}</Animated.Text></View>} />
+        }]}>{data?.name ?? ''}</Animated.Text></View>} />
       <StatusBar translucent />
       <PaperBackground>
         <Animated.FlatList
           onScroll={handleScroll}
-          data={[1, 2, 2,2, 2]}
+          data={data?.todos ?? []}
           style={styles.listStyle}
-          ListHeaderComponent={() => ListHeader(title, '12/5/2024')}
+          ListHeaderComponent={() => ListHeader(data?.name ?? '', '12/5/2024')}
           ItemSeparatorComponent={() => <View style={{ height: 2, flex: 1 }}></View>}
           renderItem={renderItem}
         />
@@ -112,7 +122,7 @@ export default function ListTodoScreen({route}: ListTodoProp) {
         icon={{ name: 'add', color: 'white' }}
         color={subColor}
         onPress={ () => {
-          navigation.navigate('TodoDetails')
+          navigation.navigate('TodoDetails', {groupId: params?.group?.id ?? '' })
         }}
       />  
     </SafeAreaView>

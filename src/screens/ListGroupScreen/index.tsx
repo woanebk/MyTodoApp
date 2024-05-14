@@ -9,10 +9,12 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { FontSizes } from '../../utils/fonts'
 import { useAppNavigation } from '../../hooks/useAppNavigation'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
+import { useGroups } from '../../context/GroupProvider'
 
 export default function ListGroupScreen({ }) {
   const navigation = useAppNavigation();
   const [myGroups, setMyGroups] = useState<TodoGroup[]>()
+  const {groups} = useGroups()
 
   useEffect(() => {
     navigation.setOptions({
@@ -21,63 +23,23 @@ export default function ListGroupScreen({ }) {
       headerRight: () => (
         <Icon name='search' />
       ),
-    })
-    getListTodoGroup()
-  }, [])
-
-  const getListTodoGroup = async () => {
-    setMyGroups([
-      {
-        name: 'Oke las',
-        todos: [
-          {
-            name: 'asd',
-            id: 1
-          }
-        ]
-      },
-      {
-        name: 'Yoyo',
-        todos: []
-      },
-      {
-        name: 'Oke las',
-        todos: []
-      },
-      {
-        name: 'Oke las',
-        todos: [
-          {
-            name: 'asd',
-            id: 1
-          }
-        ]
-      },
-      {
-        name: 'Yoyo',
-        todos: []
-      },
-      {
-        name: 'Oke las',
-        todos: []
-      },
-    ])
-  }
+    }) 
+  }, []) 
 
   const defaultGroups = () => {
     return (
       <View>
         <GroupCard icon={<Icon name='sunny' color={MyColors.orange} type='ionicons' />}
-          group={{ name: 'All', todos: [], mainColor: MyColors.orange }} isDefault={false}
+          group={{id: 'all', name: 'All', todos: [], mainColor: MyColors.orange }} isDefault={false}
         />
         <GroupCard icon={<Icon name='star-outline' color={MyColors.red} type='ionicons' />}
-          group={{ name: 'Important', todos: [], mainColor: MyColors.red }} isDefault={false}
+          group={{id: 'important', name: 'Important', todos: [], mainColor: MyColors.red }} isDefault={false}
         />
         <GroupCard icon={<Icon name='calendar' style={{ marginLeft: 4 }} size={18} color={MyColors.indianred} type='feather' />}
-          group={{ name: 'Planned', todos: [] ,mainColor: MyColors.indianred }} isDefault={false}
+          group={{id: 'planned', name: 'Planned', todos: [] ,mainColor: MyColors.indianred }} isDefault={false}
         />
         <GroupCard icon={<Icon name='person-outline' color={MyColors.green} type='ionicons' />}
-          group={{ name: 'Personal', todos: [], mainColor: MyColors.green  }} isDefault={false}
+          group={{ id: 'personal', name: 'Personal', todos: [], mainColor: MyColors.green  }} isDefault={false}
         />
       </View>)
   }
@@ -90,13 +52,13 @@ export default function ListGroupScreen({ }) {
       >
         {defaultGroups()}
         <View style={styles.divider} />
-        {myGroups?.map((item, index) =>
+        {groups?.map((item, index) =>
           <GroupCard key={index.toString()} group={item} />
 
         )}
       </ScrollView>
       <TouchableOpacity onPress={() => {
-    navigation.navigate('ListTodo', { isCreate: true}) 
+        navigation.navigate('ListTodo', { isCreate: true}) 
       }}>
         <View style={styles.actionFooter}>
           <Icon name={'add'} color={MyColors.blueviolet} type='ionicons'/> 

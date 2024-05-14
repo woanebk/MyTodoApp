@@ -1,8 +1,8 @@
-import React, { PropsWithChildren, memo, useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React, { PropsWithChildren, useState } from 'react';
+import { View, TextInput, StyleSheet } from 'react-native';
 import { MyColors } from '../utils/colors';
 import { adjustColor } from '../utils/utils';
-import { FontSizes } from '../utils/fonts'; 
+import { FontSizes } from '../utils/fonts';
 
 type CustomTextInputProps = PropsWithChildren<{
   color?: string
@@ -10,9 +10,10 @@ type CustomTextInputProps = PropsWithChildren<{
   onChange?: (text: string) => void,
   onSubmit?: (text: string) => void,
   autoFocus?: boolean,
-  hint?: string, 
+  hint?: string,
+  editable?: boolean,
 }>;
-const CustomTextInput = ({ children, color = MyColors.white, text, onChange, autoFocus = false, onSubmit, hint, }: CustomTextInputProps) => {
+const CustomTextInput = ({ children, color = MyColors.white, text, onChange, autoFocus = false, onSubmit, hint, editable = true }: CustomTextInputProps) => {
   const [isFocused, setIsFocused] = useState(autoFocus);
   const [inputValue, setInputValue] = useState(text || '');
 
@@ -32,6 +33,7 @@ const CustomTextInput = ({ children, color = MyColors.white, text, onChange, aut
   return (
     <View style={styles.container}>
       <TextInput
+        editable={editable}
         placeholder={hint}
         autoFocus={autoFocus}
         style={[styles.text,

@@ -17,6 +17,7 @@ import TodoDetailsScreen from './src/screens/TodoDetailsScreen';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'; 
 import { RootStackParamList } from './src/navigation/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import GroupProvider from './src/context/GroupProvider';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,20 +25,22 @@ function App(): React.JSX.Element {
 
   return (
     <GestureHandlerRootView>
-      <BottomSheetModalProvider>
-        <NavigationContainer>
-          <RootStack.Navigator
-            initialRouteName={'ListGroup'}
-          >
-            <RootStack.Screen name={'ListGroup'} component={ListGroupScreen}
-              options={{ title: 'List Group' }} />
-            <RootStack.Screen name={'ListTodo'} component={ListTodoScreen}
-              options={{ title: 'List To do' }} />
-            <RootStack.Screen name={'TodoDetails'} component={TodoDetailsScreen}
-              options={{ title: '' }} />
-          </RootStack.Navigator>
-        </NavigationContainer>
-      </BottomSheetModalProvider>
+      <GroupProvider>
+        <BottomSheetModalProvider>
+          <NavigationContainer>
+            <RootStack.Navigator
+              initialRouteName={'ListGroup'}
+            >
+              <RootStack.Screen name={'ListGroup'} component={ListGroupScreen}
+                options={{ title: 'List Group' }} />
+              <RootStack.Screen name={'ListTodo'} component={ListTodoScreen}
+                options={{ title: 'List To do' }} />
+              <RootStack.Screen name={'TodoDetails'} component={TodoDetailsScreen}
+                options={{ title: '' }} />
+            </RootStack.Navigator>
+          </NavigationContainer>
+        </BottomSheetModalProvider>
+      </GroupProvider>
     </GestureHandlerRootView>
   );
 }

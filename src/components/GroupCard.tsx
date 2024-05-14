@@ -8,6 +8,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { NavigationProp, useNavigation } from '@react-navigation/native'; 
 import { RootStackParamList } from '../navigation/types';
 import { useAppNavigation } from '../hooks/useAppNavigation';
+import { useGroups } from '../context/GroupProvider';
 
 
 type GroupCardProps = PropsWithChildren<{
@@ -18,6 +19,7 @@ type GroupCardProps = PropsWithChildren<{
 }>;
 
 function GroupCard({ children, onDelete, icon, group, isDefault = true }: GroupCardProps): React.JSX.Element {
+  const {deleteGroup} = useGroups();
   const navigation = useAppNavigation();
   const content = () => <TouchableWithoutFeedback onPress={() => {
     navigation.navigate('ListTodo', { group: group})
@@ -32,7 +34,9 @@ function GroupCard({ children, onDelete, icon, group, isDefault = true }: GroupC
   </TouchableWithoutFeedback>
 
   return isDefault
-    ? <Swipe onDelete={onDelete}>
+    ? <Swipe onDelete={() => {
+      deleteGroup(group.id);
+    }}>
         {content()}
       </Swipe>
     : content();

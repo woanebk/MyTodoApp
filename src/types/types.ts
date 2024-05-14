@@ -1,11 +1,12 @@
 type TodoGroup = {
+    id: string;
     name: string; 
     todos: Todo[];
     mainColor?: string
 }
 
 type Todo = { 
-  id: number;
+  id: string;
   name: string;
   descr?: string;
   isFavorite?: boolean;

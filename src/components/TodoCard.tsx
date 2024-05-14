@@ -6,24 +6,30 @@ import { FontSizes } from '../utils/fonts';
 import FavoriteButton from './FavoriteButton';
 import Swipe from './Swipe';
 import { useAppNavigation } from '../hooks/useAppNavigation';
+import { useGroups } from '../context/GroupProvider';
 
 type TodoCardProps = PropsWithChildren<{
-  onDelete?: Function
+  onDelete?: Function,
+  todo: Todo,
+  groupId: string
 }>;
 
-function TodoCard({ children, onDelete }: TodoCardProps): React.JSX.Element {
+function TodoCard({ children, onDelete, todo, groupId }: TodoCardProps): React.JSX.Element {
   const navigation = useAppNavigation();
+  const {deleteTodo} = useGroups()
 
   return (
-    <Swipe onDelete={onDelete} borderRadius={8}>
+    <Swipe onDelete={async () => {
+      await deleteTodo(todo.id)
+    }} borderRadius={8}>
       <Pressable onPress={() => {
-        navigation.navigate('TodoDetails')
+        navigation.navigate('TodoDetails', {todo, groupId})
       }}>
       <View style={styles.container}>
          <Checkbox />
         <View style={styles.info}>
-          <Text numberOfLines={1} style={styles.titleText}>asd</Text>
-          <Text numberOfLines={1} style={styles.descrText}>asd</Text>
+          <Text numberOfLines={1} style={styles.titleText}>{todo.name}</Text>
+          <Text numberOfLines={1} style={styles.descrText}>{todo.descr}</Text>
         </View>
         <FavoriteButton isCheck={false} />
       </View>
