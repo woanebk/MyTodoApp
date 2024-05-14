@@ -4,9 +4,7 @@ import { MyColors } from '../utils/colors';
 import { FontSizes } from '../utils/fonts';
 import { Icon } from '@rneui/themed';
 import Swipe from './Swipe';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { NavigationProp, useNavigation } from '@react-navigation/native'; 
-import { RootStackParamList } from '../navigation/types';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'; 
 import { useAppNavigation } from '../hooks/useAppNavigation';
 import { useGroups } from '../context/GroupProvider';
 

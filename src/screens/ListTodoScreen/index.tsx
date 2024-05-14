@@ -51,12 +51,16 @@ export default function ListTodoScreen({route}: ListTodoProp) {
   }, [])
 
   useLayoutEffect(() => {
-    if (!params?.group) {
+    if (!params?.group) { // Tạo mới
       var uuid = generateUUID()
       createNewGroup({id: uuid, name: DEFAULT_GROUP_NAME, todos: []})
       setId(uuid)
-    } else {
+    } else { // Đã có sẵn
       setId(params.group.id)
+
+      if (!groups.find(e => e.id === params.group?.id)) { // Trường hợp các loại group mặc định
+        groups.push(params.group)
+      }
     }
   }, []) 
 

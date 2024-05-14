@@ -32,7 +32,7 @@ function App(): React.JSX.Element {
               initialRouteName={'ListGroup'}
             >
               <RootStack.Screen name={'ListGroup'} component={ListGroupScreen}
-                options={{ title: 'List Group' }} />
+                options={{ title: 'My To do app' }} />
               <RootStack.Screen name={'ListTodo'} component={ListTodoScreen}
                 options={{ title: 'List To do' }} />
               <RootStack.Screen name={'TodoDetails'} component={TodoDetailsScreen}
