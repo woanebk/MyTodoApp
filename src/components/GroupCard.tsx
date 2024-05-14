@@ -4,7 +4,7 @@ import { MyColors } from '../utils/colors';
 import { FontSizes } from '../utils/fonts';
 import { Icon } from '@rneui/themed';
 import Swipe from './Swipe';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'; 
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useAppNavigation } from '../hooks/useAppNavigation';
 import { useGroups } from '../context/GroupProvider';
 
@@ -17,10 +17,10 @@ type GroupCardProps = PropsWithChildren<{
 }>;
 
 function GroupCard({ children, onDelete, icon, group, isDefault = true }: GroupCardProps): React.JSX.Element {
-  const {deleteGroup} = useGroups();
+  const { deleteGroup } = useGroups();
   const navigation = useAppNavigation();
   const content = () => <TouchableWithoutFeedback onPress={() => {
-    navigation.navigate('ListTodo', { group: group})
+    navigation.navigate('ListTodo', { group: group })
   }}>
     <View style={styles.container}>
       {icon || <Icon name='list' color={MyColors.blueviolet} />}
@@ -35,8 +35,8 @@ function GroupCard({ children, onDelete, icon, group, isDefault = true }: GroupC
     ? <Swipe onDelete={() => {
       deleteGroup(group.id);
     }}>
-        {content()}
-      </Swipe>
+      {content()}
+    </Swipe>
     : content();
 }
 

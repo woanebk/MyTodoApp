@@ -1,7 +1,6 @@
 import { StatusBar, StyleSheet, View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
+import { SafeAreaView } from 'react-native-safe-area-context' 
 import GroupCard from '../../components/GroupCard'
 import { Icon } from '@rneui/themed'
 import { MyColors } from '../../utils/colors'

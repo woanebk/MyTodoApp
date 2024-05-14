@@ -1,6 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { MyColors } from '../utils/colors';
+import { StyleSheet, View } from 'react-native'; 
 
 type CustomAppbarProps = PropsWithChildren<{ 
 }>;

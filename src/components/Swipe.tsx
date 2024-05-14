@@ -1,5 +1,5 @@
-import { memo, useEffect, useRef, type PropsWithChildren } from 'react';
-import { Animated, StyleSheet, View, Text, Alert } from 'react-native';
+import { useRef, type PropsWithChildren } from 'react';
+import { StyleSheet, View, Text, Alert } from 'react-native';
 import { MyColors } from '../utils/colors';
 import { Swipeable } from 'react-native-gesture-handler';
 import RightAction from './RightAction';
@@ -20,10 +20,12 @@ function Swipe({ children, onDelete, borderRadius }: SwipeProps): React.JSX.Elem
         {
           text: 'Yes',
           style: 'default',
-          onPress: () => { if (onDelete) {
-            swipableRef.current?.close()
-            onDelete() 
-          }}
+          onPress: () => {
+            if (onDelete) {
+              swipableRef.current?.close()
+              onDelete()
+            }
+          }
         },
         {
           text: 'Cancel',
