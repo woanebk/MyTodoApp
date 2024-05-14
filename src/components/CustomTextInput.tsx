@@ -12,8 +12,9 @@ type CustomTextInputProps = PropsWithChildren<{
   autoFocus?: boolean,
   hint?: string,
   editable?: boolean,
+  onBlur?: () => void
 }>;
-const CustomTextInput = ({ children, color = MyColors.white, text, onChange, autoFocus = false, onSubmit, hint, editable = true }: CustomTextInputProps) => {
+const CustomTextInput = ({ children, color = MyColors.white, text, onChange, onBlur, autoFocus = false, onSubmit, hint, editable = true }: CustomTextInputProps) => {
   const [isFocused, setIsFocused] = useState(autoFocus);
   const [inputValue, setInputValue] = useState(text || '');
 
@@ -23,6 +24,7 @@ const CustomTextInput = ({ children, color = MyColors.white, text, onChange, aut
 
   const handleBlur = () => {
     setIsFocused(false);
+    if (onBlur) onBlur()
   };
 
   const handleChangeText = (text: string) => {

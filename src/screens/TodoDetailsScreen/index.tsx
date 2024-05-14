@@ -1,10 +1,8 @@
-import { Keyboard, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { MyColors } from '../../utils/colors'
-import { useNavigation } from '@react-navigation/native'
 import { Icon } from '@rneui/themed'
-import CustomTextInput from '../../components/CustomTextInput'
 import { TextInput } from 'react-native-gesture-handler'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import { FontSizes } from '../../utils/fonts'
@@ -19,12 +17,12 @@ type TodoDetailsProp = NativeStackScreenProps<RootStackParamList, 'TodoDetails'>
 
 export default function TodoDetailsScreen({ route }: TodoDetailsProp) {
   const navigation = useAppNavigation()
-  const { createTodo } = useGroups()
+  const { createTodo, updateTodo } = useGroups()
 
   const params = route.params;
 
-  const [title, setTitle] = useState<string>('')
-  const [note, setNote] = useState<string>('')
+  const [title, setTitle] = useState<string>(params.todo?.name ?? '')
+  const [note, setNote] = useState<string>(params.todo?.descr ?? '')
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,12 +31,16 @@ export default function TodoDetailsScreen({ route }: TodoDetailsProp) {
   }, [])
 
   const onSubmit = () => {
-    const uuid = generateUUID()
-    createTodo({
-      id: uuid,
-      name: title,
-      descr: note,
-    }, params.groupId)
+    if (params.todo) { // EDIT
+      updateTodo({ ...params.todo, ...{ name: title, descr: note } })
+    } else { // CREATE
+      const uuid = generateUUID()
+      createTodo({
+        id: uuid,
+        name: title,
+        descr: note,
+      }, params.groupId)
+    }
 
     navigation.goBack()
   }
@@ -47,22 +49,23 @@ export default function TodoDetailsScreen({ route }: TodoDetailsProp) {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent />
       <CustomHeader
-        title={<View style={styles.titleContainer}><Text style={styles.titleText}>asd</Text></View>}
+        title={<View style={styles.titleContainer}></View>}
         suffix={
-          <TouchableOpacity onPress={onSubmit}>
+          title ? <TouchableOpacity onPress={onSubmit}>
             <Icon name='check' type='ionicons' />
-          </TouchableOpacity>} />
+          </TouchableOpacity> : <></>
+        } />
       <View style={{ flex: 1 }}>
         <View style={[styles.row, { alignItems: 'center' }]}>
           <Icon name='circle' type='ionicons' size={FontSizes.medium} />
-          <TextInput multiline placeholder='Todo' style={styles.input} autoFocus onChangeText={e => {
+          <TextInput multiline placeholder='Todo' value={title} style={styles.input} autoFocus onChangeText={e => {
             setTitle(e)
           }} />
         </View>
 
         <View style={[styles.row, { alignItems: 'flex-start' }]}>
           <Icon name='create' type='ionicons' size={FontSizes.medium} style={{ marginTop: 10 }} />
-          <TextInput multiline placeholder='Note' style={[styles.input, {
+          <TextInput multiline placeholder='Note' value={note} style={[styles.input, {
             height: 280,
             textAlignVertical: 'top',
           }]} onChangeText={e => {
@@ -94,9 +97,5 @@ const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
     alignItems: 'center',
-  },
-  titleText: {
-    fontSize: FontSizes.medium,
-    color: MyColors.black
   },
 })

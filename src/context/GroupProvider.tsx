@@ -7,19 +7,25 @@ groups: TodoGroup[],
 setGroups:  (g: TodoGroup[]) => void,
 getGroups: () => void,
 saveGroupsData: () => void,
-createNewGroup: (g : TodoGroup) => void,
+createNewGroup: (g : TodoGroup) => TodoGroup,
 deleteGroup: (id: string) => void,
 createTodo: (newTodo: Todo, groupId : string) => void,
-deleteTodo: (todoId: string) => void
+deleteTodo: (todoId: string) => void,
+updateTodo: (todo: Todo) => void,
+updateGroup: (g: TodoGroup) => void,
+getGroupById: (id: string) => TodoGroup | undefined
 }>({
   groups: [],
   setGroups: (g) => {},
   getGroups: () => {},
   saveGroupsData: () => {},
-  createNewGroup: (g) => {},
+  createNewGroup: (g) => {return {id:'',name:'', todos: []}},
   deleteGroup: (id) => {},
   createTodo: (newTodo , groupId ) => {},
-  deleteTodo: (todoId) => {}
+  deleteTodo: (todoId) => {},
+  updateTodo: (todo) => {},
+  updateGroup: (g) => {}, 
+  getGroupById: (id) => {return {id:'',name:'', todos: []}},
 });
 
 type GroupProviderProps = PropsWithChildren<{ 
@@ -55,56 +61,60 @@ const GroupProvider = ({ children }: GroupProviderProps) => {
      }
   }
 
-  const createNewGroup = async (g : TodoGroup) => {
-    try {  
-      setGroups([...[g] ,...groups])
-    }
-     catch (e) {
-      console.log('Error createNewGroup: ', e) 
-     }
+  const getGroupById = (id : string) => {
+    return groups.find(e => e.id === id)
   }
 
-  const deleteGroup = async (id: string) => {
-    try {
-      setGroups(groups => groups.filter(e => e.id !== id))
-    }
-     catch (e) {
-      console.log('Error deleteGroup: ', e) 
-     }
+  const createNewGroup = (g : TodoGroup) => {
+    setGroups([...[g] ,...groups]) 
+    return g;
   }
 
-  const createTodo = async (newTodo: Todo, groupId : string) => {
-    try { 
-      console.log(newTodo)
-      var targetGroup = groups.filter(e => e.id === groupId)
+  const deleteGroup = (id: string) => {
+    setGroups(groups => groups.filter(e => e.id !== id)) 
+  }
+
+  const updateGroup = (g: TodoGroup) => { 
+    var targetGroup = groups.find(e => e.id === g.id)
+    if (targetGroup) {
+      const updateIndex = groups.indexOf(targetGroup)
+      groups.splice(updateIndex, 1, g)
+      setGroups(groups)
+      setForceUpdate(e => !e)
+    }
+  }
+
+  const createTodo = (newTodo: Todo, groupId : string) => {
+    var targetGroup = groups.filter(e => e.id === groupId)
       if (targetGroup.length > 0) {
         targetGroup[0].todos.push(newTodo)
       }
       setGroups(groups)
       setForceUpdate(e => !e)
-    }
-     catch (e) {
-      console.log('Error createTodo: ', e) 
-     }
   }
 
-  const deleteTodo = async (todoId: string) => {
-    try {   
-      var targetGroup = groups.filter(g => g.todos.some(t => t.id === todoId))
+  const deleteTodo = (todoId: string) => {
+    var targetGroup = groups.filter(g => g.todos.some(t => t.id === todoId))
        if (targetGroup.length > 0) {
         const deleteIndex = targetGroup[0].todos.findIndex(e => e.id === todoId)
         targetGroup[0].todos.splice(deleteIndex, 1) 
         setGroups(groups)
         setForceUpdate(e => !e)
        }
-    }
-     catch (e) {
-      console.log('Error deleteTodo: ', e) 
-     }
+  }
+
+  const updateTodo = (todo: Todo) => {
+    var targetGroup = groups.filter(g => g.todos.some(t => t.id === todo.id))
+       if (targetGroup.length > 0) {
+        const updateIndex = targetGroup[0].todos.findIndex(e => e.id === todo.id)
+        targetGroup[0].todos.splice(updateIndex, 1, todo) 
+        setGroups(groups)
+        setForceUpdate(e => !e)
+       }
   }
 
   return (
-    <GroupContext.Provider value={{groups, setGroups, getGroups, saveGroupsData, createNewGroup, deleteGroup, createTodo, deleteTodo}}>
+    <GroupContext.Provider value={{groups, setGroups, getGroups, getGroupById, saveGroupsData, createNewGroup, deleteGroup, updateGroup, createTodo, deleteTodo, updateTodo}}>
       {children}
     </GroupContext.Provider>
   );

@@ -1,5 +1,5 @@
-import { Animated, NativeScrollEvent, NativeSyntheticEvent, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Animated, Keyboard, NativeScrollEvent, NativeSyntheticEvent, StatusBar, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TodoCard from '../../components/TodoCard'
 import { FontSizes } from '../../utils/fonts'
@@ -23,7 +23,9 @@ type ListTodoProp = NativeStackScreenProps<RootStackParamList, 'ListTodo'>
 
 export default function ListTodoScreen({route}: ListTodoProp) {
   const navigation = useAppNavigation() 
-
+  const today = new Date();
+  const formattedToday = today.toLocaleDateString('en-GB');
+  
   // Title Fade animation:
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const titleAnim = useRef(new Animated.Value(1)).current;
@@ -36,8 +38,11 @@ export default function ListTodoScreen({route}: ListTodoProp) {
   const subColor = adjustColor(mainColor, 10)
   const bgColor = adjustColor(mainColor, 70)
 
-  const [data] = useState<TodoGroup>(params!.group!) 
-  const {createNewGroup} = useGroups()
+  const [tempTitle, setTempTitle] = useState<string>(params?.group?.name ?? DEFAULT_GROUP_NAME) /// dùng để reset khi input bị click ra ngoài 
+  const {groups, createNewGroup, updateGroup} = useGroups()
+  const [forceRender, setForceRender] = useState<boolean>(false)  
+  const [id, setId] = useState<string>('')
+
 
   useEffect(() => {
     navigation.setOptions({
@@ -49,8 +54,13 @@ export default function ListTodoScreen({route}: ListTodoProp) {
     if (!params?.group) {
       var uuid = generateUUID()
       createNewGroup({id: uuid, name: DEFAULT_GROUP_NAME, todos: []})
+      setId(uuid)
+    } else {
+      setId(params.group.id)
     }
-  }, [])
+  }, []) 
+
+  const groupData = groups.find((e) => e.id === id)  
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const positionY = event.nativeEvent.contentOffset.y;
@@ -88,7 +98,17 @@ export default function ListTodoScreen({route}: ListTodoProp) {
 
   const ListHeader = (title: string, descr: string) => {
     return <Animated.View style={{ height: 70, marginTop: 0, opacity: titleAnim }}>
-      <CustomTextInput editable={!params?.group?.mainColor} color={mainColor} text={title} autoFocus={!params?.group} />
+      <CustomTextInput editable={!params?.group?.mainColor} 
+        color={mainColor} text={title} autoFocus={false}  
+        onSubmit={text => {
+          setTempTitle(text)
+            updateGroup({...groupData!, ...{name: text}})
+        }} 
+        onBlur={() => {
+          // reset giá trị text khi chưa sửa
+          setForceRender(e => !e)
+        }}
+        />
       <Text style={{ fontSize: FontSizes.medium, color: subColor }}>{descr}</Text>
     </Animated.View>
   } 
@@ -103,14 +123,14 @@ export default function ListTodoScreen({route}: ListTodoProp) {
         <Animated.Text style={[styles.titleText, {
           opacity: fadeAnim,
           color: mainColor
-        }]}>{data?.name ?? ''}</Animated.Text></View>} />
+        }]}>{params?.group?.name ?? ''}</Animated.Text></View>} />
       <StatusBar translucent />
       <PaperBackground>
         <Animated.FlatList
           onScroll={handleScroll}
-          data={data?.todos ?? []}
+          data={groupData?.todos ?? []}
           style={styles.listStyle}
-          ListHeaderComponent={() => ListHeader(data?.name ?? '', '12/5/2024')}
+          ListHeaderComponent={() => ListHeader(tempTitle, formattedToday)}
           ItemSeparatorComponent={() => <View style={{ height: 2, flex: 1 }}></View>}
           renderItem={renderItem}
         />
@@ -122,7 +142,7 @@ export default function ListTodoScreen({route}: ListTodoProp) {
         icon={{ name: 'add', color: 'white' }}
         color={subColor}
         onPress={ () => {
-          navigation.navigate('TodoDetails', {groupId: params?.group?.id ?? '' })
+          navigation.navigate('TodoDetails', {groupId: groupData!.id ?? '' })
         }}
       />  
     </SafeAreaView>

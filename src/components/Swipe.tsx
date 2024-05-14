@@ -10,6 +10,7 @@ type SwipeProps = PropsWithChildren<{
 
 function Swipe({ children, onDelete, borderRadius }: SwipeProps): React.JSX.Element {
   const swipeProgress = useRef<number>(0);
+  const swipableRef = useRef<Swipeable>(null)
 
   const showConfirmDialog = () => {
     Alert.alert(
@@ -19,7 +20,10 @@ function Swipe({ children, onDelete, borderRadius }: SwipeProps): React.JSX.Elem
         {
           text: 'Yes',
           style: 'default',
-          onPress: () => { if (onDelete) onDelete() }
+          onPress: () => { if (onDelete) {
+            swipableRef.current?.close()
+            onDelete() 
+          }}
         },
         {
           text: 'Cancel',
@@ -39,6 +43,7 @@ function Swipe({ children, onDelete, borderRadius }: SwipeProps): React.JSX.Elem
   return (
     <View style={{ borderRadius: borderRadius || 0, backgroundColor: MyColors.red }}>
       <Swipeable
+        ref={swipableRef}
         renderRightActions={(progressValue, dragValue) =>
           <RightAction progress={progressValue}
             dragAnimatedValue={dragValue}

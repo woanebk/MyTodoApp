@@ -13,7 +13,6 @@ import { useGroups } from '../../context/GroupProvider'
 
 export default function ListGroupScreen({ }) {
   const navigation = useAppNavigation();
-  const [myGroups, setMyGroups] = useState<TodoGroup[]>()
   const {groups} = useGroups()
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export default function ListGroupScreen({ }) {
         )}
       </ScrollView>
       <TouchableOpacity onPress={() => {
-        navigation.navigate('ListTodo', { isCreate: true}) 
+        navigation.navigate('ListTodo', { }) 
       }}>
         <View style={styles.actionFooter}>
           <Icon name={'add'} color={MyColors.blueviolet} type='ionicons'/> 
