@@ -1,18 +1,21 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Animated } from 'react-native';
 import { MyColors } from '../utils/colors';
 
 type CheckboxProps = PropsWithChildren<{
-    color?: string
+    color?: string,
+    isChecked?: boolean,
+    onTap?: () => void
   }>;
 
-const Checkbox = ({color = MyColors.blueviolet}: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(false);
+const Checkbox = ({color = MyColors.blueviolet, isChecked = false, onTap}: CheckboxProps) => { 
   const scaleValue = new Animated.Value(1);
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+  useEffect(() => {
+    handleCheckboxChange()
+  }, [isChecked])
 
+  const handleCheckboxChange = () => {  
     // Apply the bounce animation
     Animated.sequence([
       Animated.timing(scaleValue, {
@@ -29,7 +32,7 @@ const Checkbox = ({color = MyColors.blueviolet}: CheckboxProps) => {
   };
 
   return (
-    <TouchableOpacity onPress={handleCheckboxChange}>
+    <TouchableOpacity onPress={onTap}>
       <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
         <View
           style={{

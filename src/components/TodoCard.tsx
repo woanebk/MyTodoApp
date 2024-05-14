@@ -7,6 +7,7 @@ import FavoriteButton from './FavoriteButton';
 import Swipe from './Swipe';
 import { useAppNavigation } from '../hooks/useAppNavigation';
 import { useGroups } from '../context/GroupProvider';
+import { Icon } from '@rneui/themed';
 
 type TodoCardProps = PropsWithChildren<{
   onDelete?: Function,
@@ -16,7 +17,11 @@ type TodoCardProps = PropsWithChildren<{
 
 function TodoCard({ children, onDelete, todo, groupId }: TodoCardProps): React.JSX.Element {
   const navigation = useAppNavigation();
-  const {deleteTodo} = useGroups()
+  const {deleteTodo, updateTodo} = useGroups()
+
+  const check = (value: boolean) => {  
+    updateTodo({ ...todo, ...{ done: value } })
+  }
 
   return (
     <Swipe onDelete={async () => {
@@ -26,12 +31,12 @@ function TodoCard({ children, onDelete, todo, groupId }: TodoCardProps): React.J
         navigation.navigate('TodoDetails', {todo, groupId})
       }}>
       <View style={styles.container}>
-         <Checkbox />
+         <Checkbox isChecked={todo.done} onTap={() => {check(!todo.done)}}/>
         <View style={styles.info}>
           <Text numberOfLines={1} style={styles.titleText}>{todo.name}</Text>
           <Text numberOfLines={1} style={styles.descrText}>{todo.descr}</Text>
         </View>
-        <FavoriteButton isCheck={false} />
+        {todo.done && <Icon name='check' type='ionicons' color={MyColors.grey}/>}
       </View>
       </Pressable>
     </Swipe>
