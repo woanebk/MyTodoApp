@@ -117,7 +117,7 @@ export default function ListTodoScreen({route}: ListTodoProp) {
   } 
 
   const renderItem = ({item, index}: {item: Todo, index: number}) => {
-    return (<TodoCard groupId={params?.group?.id ?? ''} key={index} todo={item}/>)
+    return (<TodoCard groupId={params?.group?.id ?? ''} key={index} todo={item} color={groupData?.mainColor}/>)
   }
 
   return (

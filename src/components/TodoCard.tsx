@@ -11,10 +11,11 @@ import { Icon } from '@rneui/themed';
 type TodoCardProps = PropsWithChildren<{
   onDelete?: Function,
   todo: Todo,
-  groupId: string
+  groupId: string,
+  color?: string
 }>;
 
-function TodoCard({ children, onDelete, todo, groupId }: TodoCardProps): React.JSX.Element {
+function TodoCard({ children, onDelete, todo, groupId , color = MyColors.blueviolet}: TodoCardProps): React.JSX.Element {
   const navigation = useAppNavigation();
   const {deleteTodo, updateTodo} = useGroups()
 
@@ -30,7 +31,7 @@ function TodoCard({ children, onDelete, todo, groupId }: TodoCardProps): React.J
         navigation.navigate('TodoDetails', {todo, groupId})
       }}>
       <View style={styles.container}>
-         <Checkbox isChecked={todo.done} onTap={() => {check(!todo.done)}}/>
+         <Checkbox isChecked={todo.done} color={color} onTap={() => {check(!todo.done)}}/>
         <View style={styles.info}>
           <Text numberOfLines={1} style={styles.titleText}>{todo.name}</Text>
           <Text numberOfLines={1} style={styles.descrText}>{todo.descr}</Text>
