@@ -25,7 +25,7 @@ export default function ListGroupScreen({ }) {
     return (
       <View>
         <GroupCard icon={<Icon name='sunny' color={MyColors.orange} type='ionicons' />}
-          group={{ id: 'fun', name: 'All', todos: groups.find(e => e.id === 'fun')?.todos ?? [], mainColor: MyColors.orange }}
+          group={{ id: 'fun', name: 'Fun', todos: groups.find(e => e.id === 'fun')?.todos ?? [], mainColor: MyColors.orange }}
           isDefault={true}
         />
         <GroupCard icon={<Icon name='star-outline' color={MyColors.red} type='ionicons' />}
